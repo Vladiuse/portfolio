@@ -798,6 +798,7 @@
             tableRow.append(size_cell)
             return tableRow
         }
+        const full = location.protocol + '//' + location.host;
         var PWD = '/projects/'
         DIRS = {
             '/': {
@@ -969,7 +970,7 @@
     }
     
 
-    let url = 'http://127.0.0.1:8000/' + "/{%url 'terminal:file_content'%}"
+    let url = full + "/{%url 'terminal:file_content'%}"
     let is_loading = false;
     function getFileContent(file_id){
         if (is_loading){return}

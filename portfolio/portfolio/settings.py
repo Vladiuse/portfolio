@@ -40,7 +40,7 @@ SECRET_KEY = get_secret('DJ_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['portfolio.vim-store.ru']
+ALLOWED_HOSTS = ['portfolio.vim-store.ru', '127.0.0.1']
 
 
 # Application definition

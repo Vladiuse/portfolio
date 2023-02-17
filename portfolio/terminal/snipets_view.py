@@ -1,8 +1,8 @@
 import os
 import json
+from django.conf import settings
 
 def drop_html_format(string):
-    print(string, string.endswith('.html') and string.count('.') == 2)
     if string.endswith('.html') and string.count('.') == 2:
         string = string.split('.')[:-1]
         string = '.'.join(string)
@@ -34,8 +34,8 @@ def get_templates(to_json=True):
     DIR = {
         ROOT: {}
     }
-    path = 'terminal/templates/terminal/files'
-    relpath = 'terminal/templates/'
+    path = os.path.join(settings.BASE_DIR,'terminal/templates/terminal/files')
+    relpath = os.path.join(settings.BASE_DIR,'terminal/templates/')
     get_structure_of_templates(path, DIR[ROOT], relpath=relpath)
     if to_json:
         return json.dumps(DIR)
