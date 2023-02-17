@@ -101,17 +101,17 @@ DATABASES = {
 }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'portfolio',
-        'USER': 'vlad',
-        'PASSWORD': '20003000Ab%',
-        'HOST': 'localhost',
-        # 'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'portfolio',
+#         'USER': 'vlad',
+#         'PASSWORD': '20003000Ab%',
+#         'HOST': 'localhost',
+#         # 'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
