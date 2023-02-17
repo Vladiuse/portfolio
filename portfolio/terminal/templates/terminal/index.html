@@ -85,6 +85,13 @@
     }
 </style>
 <style>
+    *::selection {
+    background: var(--navbar-background);
+    }
+    *::-moz-selection {
+    background: var(--navbar-background);
+    }
+
     .screen{
         display: inline-block;
         padding: 3px;
@@ -131,6 +138,9 @@
         color: var(--terminal-font-color);
         width: 100%;
         opacity: 1;
+    }
+    .modal hr{
+        color: var(--modal-font-color);
     }
     ul{
         font-size: var(--main-text-font-size);
@@ -455,10 +465,10 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                   <div>
-                    <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'tetris.html');">{{"Brick Game"|span }}</li>
-                    <li><a class="dropdown-item" href="#">{{"Link Checker..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'tetris.py');">{{"Brick Game"|span }}</li>
+                    <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'w_LinkChecker.py');">{{"Link Checker..."|span }}</a></li>
                     <li><a class="dropdown-item" href="#">{{"Archive of sites..."|span }}</a></li>
-                    <li><a class="dropdown-item" href="#">{{"Simple cataloge..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'simple_cataloge.py');">{{"Simple cataloge..."|span }}</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'portfolio_site.html');">{{"Portfolio site..."|span }}</a></li>
                   </div>
@@ -899,8 +909,9 @@
         // }
         function cat(file_fir_path, file_name){
             let dir_data = get_content(file_fir_path)
-            // console.log(dir_data, 'dir_data')
-            // console.log(file_fir_path, 'file_fir_path')
+            console.log(dir_data, 'dir_data')
+            console.log(file_fir_path, 'file_fir_path')
+            console.log(file_name, 'file_name')
             let file = dir_data[file_name]
             let file_path  = file['path']
             console.log(file_path, 'file_path')
