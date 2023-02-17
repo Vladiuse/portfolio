@@ -1,0 +1,191 @@
+{%load code%}
+<h1># Postfolio</h1>
+<p>Link: <a href="https://some.com/">https://some.com/</a></p>
+<p>GitHub: <a href="https://github.com/Vladiuse/-OI-AMK">https://github.com/Vladiuse/-OI-AMK</a></p>
+<p>This is the project of current weppage.</p>
+<br>
+<p>For highlite examples of code use Pygments library and write a few custom tags:</p>
+{%lang 'python'%}
+from pygments import highlight
+from pygments.lexers import PythonLexer, HtmlLexer, JavascriptLexer, CssLexer, SqlLexer
+from pygments.formatters import HtmlFormatter
+
+LEXERS = {
+    'python': PythonLexer,
+    'sql': SqlLexer,
+    'js': JavascriptLexer,
+}
+
+@register.tag(name='lang')
+def lang(parser, token):
+    tag_name, lang = token.split_contents()
+    lang = del_quotes(lang)
+    lexer = LEXERS[lang]
+    node = parser.parse(('end',))
+    parser.delete_first_token()
+    return CodeExaple(node, lexer)
+
+
+
+class CodeExaple(template.Node):
+    def __init__(self, node,lexer):
+        self.node = node
+        self.lexer = lexer
+
+    def render(self, context):
+        output = self.node.render(context)
+        result = get_colored_code(output, self.lexer)
+        return mark_safe(result)
+{%end%}
+<hr>
+<p>To get structure of the existing files with examples of code write recursion function.</p>
+{%lang 'python'%}
+def get_structure_of_templates(path, obj, relpath=''):
+    objects_in_dir = os.listdir(path)
+    objects_in_dir.sort()
+    for item in os.listdir(path):
+        item_path = os.path.join(path, item)
+        if os.path.isfile(item_path):
+            file_size = os.path.getsize(item_path)
+            file_data = {
+                'size': str(file_size) + ' bytes',
+                'path': os.path.relpath(item_path, relpath),
+            }
+            obj.update({item: file_data})
+        else:
+            item = item + '/'
+            if not item in obj:
+                obj.update({item: {}})
+            get_structure_of_templates(item_path, obj[item], relpath)
+{%end%}
+<hr>
+For imitate walk thhrow dirs create a few functions, whit the same behavior like a few Linux commands: cat, ls and PWD.
+{%lang 'js%}
+var PWD = '/';
+function cd(path){
+    var list_dirs  =  PWD.split('/')
+    if (path == '..'){
+        list_dirs.pop()
+        list_dirs.pop()
+        list_dirs.push('')
+    }else{
+        list_dirs.pop()
+        list_dirs.push(path)
+    }
+    PWD =  list_dirs.join('/')
+    if (PWD == '') {PWD = '/'}
+    console.log(PWD, 'PWD')
+}
+
+function ls(){
+    dirsView.empty()
+    content = get_content()
+    console.log(content, 'xxx')
+    if (PWD != '/'){
+        var row = getTableRow('..', 'dir')
+        row.attr('type', 'dir')
+        row.attr('path','..')
+        dirsView.append(row)
+    }
+    if(typeof content !== "undefined")
+    {
+        let list = Object.keys(content)
+        dirs_n_files = sortDirsNFiles(list)
+    } else {dirs_n_files = []}
+    for (pos in dirs_n_files){
+        key = dirs_n_files[pos]
+        var name = key
+        
+        if (key.endsWith('/') || key =='..')
+        {var type = 'dir';var size = '...'}
+        else
+        {var type = 'file';var size = content[name]['size']}
+        var row = getTableRow(name, type, size)
+        row.attr('type', type)
+        row.attr('path',name)
+        dirsView.append(row)
+
+    }
+}
+{%end%}
+<hr>
+<p>To show screen and pixels like in one of my project, create tag to transform text into HTML</p>
+<div style="
+display: flex;
+justify-content: space-around;
+align-items: baseline;
+">
+
+<pre style=" display: inline-block;font-size: 18px;">
+    [x][x][x][x][x][ ][x][x][x][x]
+    [x][x][x][x][ ][ ][ ][x][ ][x]
+    [x][ ][ ][x][ ][ ][ ][ ][ ][x]
+    [ ][ ][ ][x][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][x][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][x][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+    [ ][ ][ ][ ][x][ ][ ][ ][ ][ ]
+    [ ][ ][ ][x][x][x][ ][ ][ ][ ]
+    </pre>
+    <div class="screen">
+        {%pixel_screen%}
+        [x][x][x][x][x][ ][x][x][x][x]
+        [x][x][x][x][ ][ ][ ][x][ ][x]
+        [x][ ][ ][x][ ][ ][ ][ ][ ][x]
+        [ ][ ][ ][x][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][x][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][x][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        [ ][ ][ ][ ][x][ ][ ][ ][ ][ ]
+        [ ][ ][ ][x][x][x][ ][ ][ ][ ]
+        {%end%}
+    </div>
+</div>
+{%lang 'python'%}
+@register.tag(name='pixel_screen')
+def tetris_screen_highlight(parser, token):
+    node = parser.parse(('end',))
+    parser.delete_first_token()
+    return ScreenHighLight(node)
+
+class ScreenHighLight(template.Node):
+    def __init__(self, node):
+        self.node = node
+
+    def render(self, context):
+        value = self.node.render(context)
+        value = value.strip()
+        rows = value.split('\n')
+        result  = ''
+        for row in rows:
+            pixel_on = '[x]'
+            pixel_off = '[ ]'
+            pixel_on_tag = '<div class="pixel on"><div>%s</div></div>' 
+            pixel_off_tag = '<div class="pixel"><div>%s</div></div>'
+            row = row.replace(pixel_on, pixel_on_tag)
+            row = row.replace(pixel_off, pixel_off_tag)
+            result += f'<div class="pixel-line">{row}</div>'
+        return mark_safe(result)
+{%end%}

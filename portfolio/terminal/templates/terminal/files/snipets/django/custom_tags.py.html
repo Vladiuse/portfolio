@@ -1,0 +1,64 @@
+{%load code%}
+<h2># Tag filter</h2>
+<p>Simple tags</p>
+{%lang 'python'%}
+# wrap first letter of word in span html tag
+@register.filter(name='span')
+def span_f_letter(value):
+    result = []
+    for word in value.split():
+        result.append(f'<span>{word[0]}</span>'+word[1:])
+    return mark_safe(' '.join(result))
+{%end%}
+<hr>
+<p>Inclusition tag</p>
+
+{%lang 'python'%}
+# take images from models and render slider with it
+@register.inclusion_tag('terminal/slider.html')
+def slider(poll):
+    images = poll.image_set.all()
+    return {'images': images}
+{%end%}
+
+{%lang 'html'%}
+<!-- IN TEMPLATE -->
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    {% verbatim %}
+      {%for image in images%}
+      <div class="carousel-item {% if forloop.first %}active {% endif %}">
+        <img src="{{image.img.url}}" class="d-block w-100" alt="...">
+      </div>
+      {%endfor%}
+      {% endverbatim %}
+  </div>
+{%end%}
+<hr>
+<p>With render</p>
+{%lang 'python'%}
+@register.tag(name='pixel_screen')
+def tetris_screen_highlight(parser, token):
+    node = parser.parse(('end',))
+    parser.delete_first_token()
+    return ScreenHighLight(node)
+
+class ScreenHighLight(template.Node):
+    def __init__(self, node):
+        self.node = node
+
+    def render(self, context):
+        value = self.node.render(context)
+        value = value.strip()
+        rows = value.split('\n')
+        result  = ''
+        for row in rows:
+            pixel_on = '[x]'
+            pixel_off = '[ ]'
+            pixel_on_tag = '<div class="pixel on"><div>%s</div></div>'
+            pixel_off_tag = '<div class="pixel"><div>%s</div></div>'
+            row = row.replace(pixel_on, pixel_on_tag)
+            row = row.replace(pixel_off, pixel_off_tag)
+            result += f'<div class="pixel-line">{row}</div>'
+        return mark_safe(result)
+
+{%end%}

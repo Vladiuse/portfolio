@@ -1,0 +1,1006 @@
+{% load mptt_tags %}
+{%load code%}
+<!DOCTYPE html>
+<html lang="en" class="{%if color_theme %}{{color_theme}}{%else%}blue{%endif%}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <style>
+        {%code_style%}
+        .highlight{
+            background-color: inherit !important;
+            margin: 10px 0;
+        }
+        .highlight pre{
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<style>
+/* const setTheme = theme => document.documentElement.className = theme; */
+    :root{
+        --modal-body-side-padding: 30px;
+        --navbar-font-size: 1.4rem;
+
+        --big-text-font-size: 1.8rem;
+        --main-text-font-size: 1.3rem;
+    }
+    :root.blue{
+        --terminal-background:#12488b;
+        --terminal-font-color: white;
+
+        --navbar-background:#2aa1b3;
+        --navbar-font-color: black;
+        --navbar-avtive-background:black;
+        --navbar-active-font-color: white;
+
+        --modal-font-color: black;
+        --modal-background: #d0cfcc;
+
+        --font-hightligt: #e9ad0c;
+    }
+</style>
+<style>
+    :root.pink{
+        /* --terminal-background:#913175; */
+        --terminal-background:#2E0921;
+        --terminal-font-color: #E9E8E8;
+
+        /* --navbar-background:#20262E;
+        --navbar-font-color: #E9E8E8;
+        --navbar-avtive-background:#CD5888;
+        --navbar-active-font-color:  #E9E8E8;  */
+        /* V2 */
+        --navbar-background:#20262E;
+        --navbar-font-color: #E9E8E8;
+        --navbar-avtive-background: #E9E8E8;
+        --navbar-active-font-color: #CD5888; 
+           /* V2 */
+
+        --modal-font-color: black;
+        --modal-background: #d0cfcc;
+
+        /* --font-hightligt: #20262E; */
+        --font-hightligt:#26A269;
+    }
+    :root.green{
+        --terminal-background: #004428;
+        --terminal-font-color: #F4EEA9;
+
+        --navbar-background:#20262E;
+        --navbar-font-color:  #F4EEA9;
+        --navbar-avtive-background:#F4EEA9;
+        --navbar-active-font-color: #519259; 
+
+        --modal-font-color: black;
+        --modal-background: #d0cfcc;
+
+        --font-hightligt: #F0BB62;
+        --font-hightligt: #f06262;
+    }
+</style>
+<style>
+    .screen{
+        display: inline-block;
+        padding: 3px;
+        background-color: #959F7D;
+        border: 2px solid black;
+    }
+    .screen .pixel-line{
+        line-height: 1;
+        font-size: 1px;
+    }
+    .screen .pixel{
+        margin: 1px;
+        padding: 2px;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #85907A ;
+        
+        display: inline-block;
+    }
+    .screen .pixel div{
+        width: 100%;
+        height: 100%;
+        background-color: #85907A;
+    }
+    .screen .pixel.on{
+        border: 2px solid black ;
+    }
+    .screen .pixel.on div{
+        background-color: black;
+    }
+
+</style>
+<style>
+    body{
+        background-color: var(--terminal-background);
+        color: white;
+        font: 1rem Inconsolata, monospace;
+/* 
+        font-family: 'Future Earth', sans-serif; */
+        font-family: 'Spoof Trial', sans-serif;
+    }
+    hr{
+        height: 2px;
+        color: var(--terminal-font-color);
+        width: 100%;
+        opacity: 1;
+    }
+    ul{
+        font-size: var(--main-text-font-size);
+    }
+    button,a{
+        cursor: default !important;
+    }
+    .btn:focus{
+        box-shadow: none;
+    }
+    h1{
+        font-size: var(--big-text-font-size);
+    }
+    h1,h2,h3,h4{
+        color: white;
+    }
+    pre{
+        margin-bottom: 0;
+    }
+    #load-bar{
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+    #pwd{
+        color: var(--font-hightligt);
+    }
+    #file_name_bar span{
+        color: var(--font-hightligt);
+    }
+    h4{
+        font-size: 2rem;
+    }
+    .navbar{
+        padding-top: 0;
+        padding-bottom: 0;
+        font-size: var(--navbar-font-size);
+    }
+    nav.bg-light{
+        background-color: var(--navbar-background) !important;
+    }
+    .navbar-light .navbar-nav .nav-link{
+        color: var(--navbar-font-color);
+        padding: 0.2rem 1rem;
+        transition: none;
+    }
+    .navbar-light .navbar-nav .nav-link:focus{
+        color: var(--navbar-font-color);
+    }
+    .navbar-light .navbar-nav .nav-link:hover{
+        color: var(--navbar-font-color);
+    }
+    .navbar-light.active .navbar-nav .nav-link{
+        color:  var(--navbar-active-font-color);
+    }
+    .navbar-light .navbar-nav .nav-link.active{
+        background-color: var(--navbar-avtive-background);
+    }
+    .navbar-light .navbar-nav .nav-link.active span{
+        color: var(--font-hightligt);
+    }
+
+    .main{
+        padding: 20px;
+        color: white;
+    }
+    .main .row .col{
+        height: 90vh;
+    }
+    .window{
+        border: 2px solid white;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        font-size: 1.5rem;
+    }
+    .window .bottom{
+        padding: 0 15px;
+        border-top: 2px solid white;
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+    .window .top{
+        height: 100%;
+        padding: 40px 20px;
+    }
+    .right .window .top{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    .left .window .top{
+        overflow: hidden;
+        overflow-y: scroll;
+        scroll-snap-type: both proximity;
+    }
+    /* SCROLL */
+    .left .window .top::-webkit-scrollbar{
+        width: 6px;
+    }
+    /* Track */
+    .left .window .top::-webkit-scrollbar-track {
+    background: var(--terminal-background); 
+    }
+
+    /* Handle */
+    .left .window .top::-webkit-scrollbar-thumb {
+    background: var(--terminal-font-color); 
+    }
+
+    /* Handle on hover */
+    .left .window .top::-webkit-scrollbar-thumb:hover {
+    background: var(--font-hightligt); 
+    }
+    /* SCROLL */
+    .main p{
+        margin-bottom: 8px;
+        color: white;
+        font-size: var(--main-text-font-size);
+    }
+    .main p::before{
+        content: "# ";
+    }
+    
+    .main p.dir:hover{
+        background-color: var(--navbar-background)
+    }
+    .main a{
+        color: white;
+        text-decoration: underline;
+        font-size: var(--main-text-font-size);
+        margin-bottom: 5px;
+    }
+    .main a:hover{
+        background-color: var(--navbar-background)
+    }
+    .navbar-expand-lg .navbar-nav .dropdown-menu {
+        background-color: var(--navbar-background) !important;
+        border-radius: 0;
+        margin: 0;
+        padding: 5px;
+
+    }
+    .navbar-expand-lg .navbar-nav .dropdown-menu hr{
+        color: white;
+        opacity: 1;
+        height: 2px;
+        margin: 0;
+        padding: 0;
+        margin: 4px -4px;
+    }
+    .navbar-expand-lg .navbar-nav .dropdown-menu div{
+        border: 2px solid white;
+        padding: 4px;
+    }
+    .dropdown-menu{
+        box-shadow: 17px 17px rgb(0, 0, 0, 0.8);
+        font-size: var(--navbar-font-size);
+    }
+    .dropdown-item{
+        color: var(--navbar-font-color);
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .dropdown-item:hover{
+        background-color: var(--navbar-avtive-background);
+        color: var(--navbar-active-font-color);
+    }
+    .dropdown-item:hover > span{
+        color: var(--font-hightligt);
+    }
+
+    .modal a{
+        color: var(--modal-font-color);
+    }
+    .modal a:hover{
+        color: var(--modal-background);
+        background-color: var(--modal-font-color);
+        transition: none;
+    }
+    .modal .modal-header{
+        border: none;
+    }
+    .modal-content{
+        background-color: var(--modal-background);
+        border-radius: 0;
+        color: var(--modal-font-color);
+        box-shadow: 17px 17px rgb(0, 0, 0, 0.8);
+    }
+    .modal .modal-body{
+        border: 2px solid var(--modal-font-color);
+        margin: 0 var(--modal-body-side-padding);
+        display: flex;
+        justify-content: center;
+    }
+    .modal-body .title{
+        text-align: center;
+        position: absolute;
+        top: -13px;
+        width: 100%;
+        left: 0px;
+    }
+    .modal-body .title span{
+        background-color: var(--modal-background);
+        padding: 0 20px;
+    }
+    .modal-body .content{
+        padding: 10px;
+    }
+    .modal .modal-footer{
+        justify-content: center;
+        border: none;
+        margin: 0 30px;
+        border: 2px solid var(--modal-font-color);
+        border-top: none;
+        border-radius: 0;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+
+    .btn-close{
+        width: auto;
+        height: auto;
+        background: inherit;
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+    }
+    .btn-close:focus {
+        box-shadow: none;
+    }
+    .btn-close:hover {
+        opacity: 1;
+    }
+    #resume {
+        flex-direction: column;
+
+    }
+    .modal .btn{
+        background-color: inherit;
+        color: var(--modal-font-color);
+        border-radius: 0;
+        transition: none;
+    }
+    .modal .btn:hover{
+        background-color: var(--modal-font-color);
+        color: var(--modal-background);
+    }
+    .modal h1{
+        color: var(--modal-font-color);
+        text-align: center;
+    }
+
+    /* Modal SETTINNGS */
+    #settingsModal .settings span{
+    margin-right: 10px;
+    font: 1rem Inconsolata, monospace;
+    }
+
+    #settingsModal .settings span::before{
+        content: "[ ]";
+    }
+    #settingsModal .settings.active span::before{
+        content: '[x]';
+    }
+    /* Modal SETTINNGS */
+
+    .main table .file_types{
+        justify-content: center;
+        display: flex;
+        text-transform: uppercase;
+    }
+    .main table thead{
+        border-bottom: 2px solid var(--terminal-font-color);
+        text-transform: uppercase;
+    }
+
+    .main table {
+        color: var(--terminal-font-color);
+        font-size: 1.5rem;
+    }
+    .main table thead{
+        color: var(--font-hightligt);
+    }
+    .main tbody tr:hover{
+        background-color: var(--navbar-background)
+    }
+    .main table .file_types,
+    .main table .file_size
+    {
+        border-left: 2px solid var(--terminal-font-color);
+        text-align: center;
+    }
+    .main tbody tr:hover > .file_types,
+    .main tbody tr:hover > .file_size
+    {
+        border-left: 2px solid black;
+    }
+
+
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <!-- <a class="navbar-brand" href="#">Navbar scroll</a> -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#" onclick="jumpToFile('/', 'about_page.html');"> {{"About"|span }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactsModal">{{"Contacts"|span }}</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{"Projects"|span }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                  <div>
+                    <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'tetris.html');">{{"Brick Game"|span }}</li>
+                    <li><a class="dropdown-item" href="#">{{"Link Checker..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"Archive of sites..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"Simple cataloge..."|span }}</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'portfolio_site.html');">{{"Portfolio site..."|span }}</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span>S</span>kils
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                  <div>
+                    <li><a class="dropdown-item" href="#">{{"Python..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"Django..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"SQL..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"Linux, Git..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"Html, Css..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"JavaScript..."|span }}</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">{{"English..."|span }}</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span>R</span>esume
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                  <div>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#resumeModal">{{"Web version..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#">{{"PDF version..."|span }}</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{"Settings"|span }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                  <div>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal" onclick="markCurColorTheme();">
+                        {{"Change color theme..."|span }}</a></li>
+                  </div>
+                </ul>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="main">
+        <div class="row">
+            <div class="col right">
+                <div class="window">
+                    <div class="top">
+                        <div>
+                        <h1>Hellow. My name is Vlad, i'm a junior web developer. Here my portfolio site with my projects and some information about me.</h1>
+                        <br><br>
+                        <!-- <div>
+                            <p>[==>------]25%</p>
+                        <p>[====<span class="flip-x">\</span>>---]55%</p>
+                        <p>[======<span class="flip-y">\</span>>-]85%</p>
+                        <span class="flip-x">\</span>
+                        <span class="flip-y">\</span>
+                        </div> -->
+                        </div>
+                        
+                        <table class="table table-borderless" id="dirs">
+                            <thead>
+                              <tr class="d-flex">
+                                <th class="col-7 file_names">Directorys</th>
+                                <th class="col-2 left-border file_types">Type</th>
+                                <th class="col-3 left-border file_size">Size</th>
+                              </tr>
+                            </thead>
+                            <tbody> 
+                                <!-- TABLE BODY -->
+                            </tbody>
+                          </table>
+                        
+                    </div>
+                    <div class="bottom">
+                        guest@portfolio:<span id="pwd">/skils</span>$
+                    </div>
+                </div>
+            </div>
+            <div class="col left">
+                <div class="window">
+                    <div class="top">
+                        
+                        <div id="file_view">
+                            
+                        </div>
+
+                       
+                    </div>
+                    <div class="bottom">
+                        <div id="file_name_bar" style="display: none;"><span>file:</span> about_page.html</div>
+                        <div id="load-bar" style="display: none;">
+                            
+                            <div id="load-text">
+                                <span class="flip-x">\</span>LOADING<span class="flip-x">\</span>
+                            </div>
+                            <pre id="load-line" ></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+  
+  <!-- Modal CONTACTS-->
+  <div class="modal" id="contactsModal" tabindex="-1" aria-labelledby="contactsModalLabel" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactsModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" >[X]</button>
+
+        </div>
+        <div class="modal-body">
+            <h5 class="title"><span>Contacts</span></h5>
+            <div class="content">
+                <p>Telegram: @vdoronin</p>
+                <p>E-mail: vladiuse@gmail.com</p>
+                <p>Phone: +375(33) 643-66-86</p>
+                <p>GitHub: Vladiuse</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-bs-dismiss="modal" >[< Close >]</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Modal CONTACTS-->
+
+    <!-- Modal Resume-->
+    <div class="modal" id="resumeModal" tabindex="-1" aria-labelledby="resumeModalLabel" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="resumeModalLabel"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" >[X]</button>
+
+            </div>
+            <div class="modal-body" id="resume">
+                <h5 class="title"><span>Resume</span></h5>
+                    <h1>Vlad Kozak</h1>
+                    <hr>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-4">
+                                <h5>UNIVERSITY</h5>
+                                <ul>
+                                    <li>Lorem ipsum dolor </li>
+                                    <li>Lorem ipsum dolor </li>
+                                    <li>Lorem ipsum dolor </li>
+                                </ul>
+                                <h5>PROGRAMMING</h5>
+                                <ul>
+                                    <li>Python</li>
+                                    <li>SQL(Postgres)</li>
+                                    <li>Html</li>
+                                    <li>Css</li>
+                                    <li>JavaScript</li>
+                                </ul>
+                            </div>
+                            <div class="col-8">
+                                <h5>Some block</h5>
+                                <ul>
+                                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                </ul>
+                                <h5>Some block</h5>
+                                <ul>
+                                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                    <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn" data-bs-dismiss="modal" >[< Close >]</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Modal SETTINNGS-->
+  <div class="modal" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="settingsModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" >[X]</button>
+
+        </div>
+        <div class="modal-body">
+            <h5 class="title"><span>Color Theme</span></h5>
+            <div class="content">
+                <p class="settings" data-theme="blue"><span></span>BLUE</p>
+                <p class="settings" data-theme="pink"><span></span>PINK</p>
+                <p class="settings" data-theme="green"><span></span>GREEN</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" onclick="saveColorTheme();">[< Save changes >]</button>
+          <button type="button" class="btn" data-bs-dismiss="modal" >[< Close >]</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <script>
+    $('.modal button').click(function(){
+        navNotActive();
+    })
+    // Color settings
+    let currentColorTheme = '{%if color_theme %}{{color_theme}}{%else%}blue{%endif%}'
+    
+
+    function saveColorTheme(){
+        let newTheme = $('#settingsModal .settings.active').attr('data-theme')
+        currentColorTheme = newTheme;
+        console.log(newTheme)
+        const setTheme = theme => document.documentElement.className = newTheme;
+        setTheme()
+        document.cookie = 'color_theme='+newTheme;
+    }
+
+    function markCurColorTheme(){
+        $('#settingsModal .settings').removeClass('active')
+        let act = $('#settingsModal .settings').filter(function(){
+            if ($(this).data('theme') == currentColorTheme)
+            {return true}
+        }).addClass('active')
+    }
+
+    $('#settingsModal .settings').click(function(){
+        $('#settingsModal .settings').removeClass('active')
+        $(this).addClass('active')
+    })
+  </script>
+
+
+  <style>
+    .flip-x{
+        display: inline-block;
+        animation: flip-x 1s infinite;
+    }
+    .flip-y{
+        display: inline-block;
+        animation: flip-y 1s infinite;
+    }
+
+
+  @keyframes flip-x {
+	0% {
+		transform: scaleX(1);
+	}
+
+	49% {
+		transform: scaleX(1);
+	}
+	50% {
+		transform: scaleX(-1);
+	}
+    99% {
+		transform: scaleX(-1);
+	}
+    100% {
+		transform: scaleX(1);
+	}
+}
+@keyframes flip-y {
+	0% {
+		transform: scaleY(1);
+	}
+
+	50% {
+		transform: scaleY(-1);
+	}
+
+	100% {
+		transform: scaleY(1);
+	}
+}
+
+  </style>
+
+      <script>
+        let nav = $('.navbar-light')
+        function navNotActive(){
+            nav.removeClass('active')
+            $('a.nav-link').removeClass('active')
+        }
+
+        $('a.nav-link').click(function(){
+            nav.addClass('active')
+            $('a.nav-link').removeClass('active')
+            $(this).addClass('active')
+        })
+        $('.main').click(function(){
+            navNotActive()
+        })
+      </script>
+
+    <script>
+        let dirsView = $('#dirs tbody')
+        let file_view = $('#file_view')
+
+
+        let startFileId = '{{start_file_id}}';
+        let lastFileId = '{{start_file_id}}';
+
+
+        function sortDirsNFiles(list){
+            let dirs = list.filter(item => item.endsWith('/'));
+            let files = list.filter(item => !item.endsWith('/'));
+            dirs.sort()
+            files.sort()
+            result = dirs
+            return dirs.concat(files)
+        }
+
+        function getTableRow(t_name, t_type, t_size=''){
+            tableRow = $('<tr class="d-flex" ></tr>');
+            name_cell = $('<td class="col-7 file_names"></td>');
+            type_cell = $('<td class="col-2 left-border file_types"></td>');
+            size_cell = $('<td class="col-3 left-border file_size"></td>');
+            name_cell.text(t_name)
+            type_cell.text(t_type)
+            size_cell.text(t_size)
+            tableRow.append(name_cell)
+            tableRow.append(type_cell)
+            tableRow.append(size_cell)
+            return tableRow
+        }
+        var PWD = '/projects/'
+        DIRS = {
+            '/': {
+                'skils/': {
+                    '..':{},
+                    'python/':{'..':{},'xxxx/':{'..':{},}},
+                    'django/':{'..':{},},
+                    'info.txt': 'INFO.txt'
+                },
+                'snipets/': {
+                    '..':{},
+                    'sql/':{'..':{},'sql_test.txt': 'sql information'},
+                    'js/':{'..':{},},
+                    'html/':{'..':{},},
+                },
+            }
+        }
+        DIRS1 = {
+                {% recursetree nodes %}
+                "{{ node.name }}":  {%if node.file_template%}"{{ node.pk }}", {%else%} {  {% if not node.is_leaf_node %} {{ children }} {% endif %} },{%endif%}
+                {% endrecursetree %}
+                }
+        
+        // DIRS = JSON.parse('{{DIRS|safe}}')
+        DIRS = {{DIRS|safe}};
+        function cd(path){
+            var list_dirs  =  PWD.split('/')
+            if (path == '..'){
+                list_dirs.pop()
+                list_dirs.pop()
+                list_dirs.push('')
+            }else{
+                list_dirs.pop()
+                list_dirs.push(path)
+            }
+            PWD =  list_dirs.join('/')
+            if (PWD == '') {PWD = '/'}
+            console.log(PWD, 'PWD')
+        }
+
+        function get_content(path=PWD){
+            let dirs_list = path.split('/')
+            dirs_list.pop()
+            content = DIRS
+            for (i in dirs_list){
+                dir = dirs_list[i] + '/'
+                content = content[dir]
+            }
+            return content
+        }
+
+        function ls(){
+            dirsView.empty()
+            content = get_content()
+            console.log(content, 'xxx')
+            if (PWD != '/'){
+                var row = getTableRow('..', 'dir')
+                row.attr('type', 'dir')
+                row.attr('path','..')
+                dirsView.append(row)
+            }
+            if(typeof content !== "undefined")
+            {
+                let list = Object.keys(content)
+                dirs_n_files = sortDirsNFiles(list)
+            } else {dirs_n_files = []}
+            for (pos in dirs_n_files){
+                key = dirs_n_files[pos]
+                var name = key
+                
+                if (key.endsWith('/') || key =='..')
+                {var type = 'dir';var size = '...'}
+                else
+                {var type = 'file';var size = content[name]['size']}
+                var row = getTableRow(name, type, size)
+                row.attr('type', type)
+                row.attr('path',name)
+                dirsView.append(row)
+
+            }
+        }
+        // function cat(file_fir_path, file_name){
+        //     let dir_data = get_content(file_fir_path)
+        //     console.log(dir_data, 'dir_data')
+        //     console.log(file_fir_path, 'file_fir_path')
+        //     let file_id = dir_data[file_name]
+        //     if (file_id != lastFileId) {getFileContent(file_id)}
+        //     lastFileId = file_id
+        //     // return dir_data[file_name]
+        // }
+        function cat(file_fir_path, file_name){
+            let dir_data = get_content(file_fir_path)
+            // console.log(dir_data, 'dir_data')
+            // console.log(file_fir_path, 'file_fir_path')
+            let file = dir_data[file_name]
+            let file_path  = file['path']
+            console.log(file_path, 'file_path')
+            if (file_path != lastFileId) {getFileContent(file_path);showCurFileName(file_name);}
+            lastFileId = file_path
+            // return dir_data[file_name]
+        }
+
+
+        dirsView.on('click', 'tr',function(){
+            if ($(this).attr('type') == 'dir')
+                {
+                let path = $(this).attr('path')
+                cd(path)
+                ls()
+                }
+            if ($(this).attr('type') == 'file'){
+                let file_name = $(this).attr('path')
+                let file_path = PWD + file_name
+                cat(PWD,file_name)
+                // file_data = cat(PWD,file_name)
+                // file_view.text(file_data)
+            }            
+            ShowPWD()
+        })
+
+        function ShowPWD(){
+            $('#pwd').text(PWD)
+        }
+
+
+
+        ls()
+        ShowPWD()
+    </script>
+
+<script>
+    // TIMER
+    let counter = 0;
+    let MAX = 20;
+    let timeOut = 50;
+    let counterEnd = false;
+    function showLoading(){
+        $('#load-bar').show()
+        let string = '='.repeat(counter) + '>'+'-'.repeat(MAX - counter)
+        string = '['+string+']'
+        $('#load-line').text(string)
+    }
+    function hideLoading(){
+        $('#load-line').text('')
+        $('#load-bar').hide()
+        $('#file_name_bar').show()
+    }
+    function startTimer(){
+        const intervalId = setInterval(() => {
+        showLoading() 
+        if (counter === MAX && counterEnd) {
+            console.log('End timer');
+            counterEnd = false;
+            counter = 0
+            clearInterval(intervalId);
+            hideLoading()
+        }
+        if (counter === MAX) {counter = 0}
+        counter += 1;
+        }, timeOut);
+    }
+    function endTimer(){
+        counterEnd = true;
+    }
+
+    function showCurFileName(file_name){
+        $('#file_name_bar').hide()
+        $('#file_name_bar').html('<span>file: </span>'+file_name)
+    }
+    
+
+    let url = 'http://127.0.0.1:8000/' + "/{%url 'terminal:file_content'%}"
+    let is_loading = false;
+    function getFileContent(file_id){
+        if (is_loading){return}
+        is_loading = true;
+        let ErrorMessage = '<h1>Error</h1>';
+        let data = {
+            'file_id': file_id,
+        }
+        file_view.empty()
+        startTimer()
+        $.get(url,data, function(responce){
+        console.log(responce)
+
+        if (responce['status']){
+            file_view.html(responce['content'])
+        } 
+        else {file_view.html(ErrorMessage)}
+        endTimer()
+        is_loading = false;
+        })
+    }
+
+    getFileContent(startFileId)
+
+    function jumpToFile(path, file_name){
+        PWD = path
+        ShowPWD()
+        ls()
+        cat(path,file_name)
+    }
+</script>
+
+</body>
+</html>

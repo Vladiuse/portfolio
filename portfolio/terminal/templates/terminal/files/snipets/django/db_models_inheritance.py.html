@@ -1,0 +1,136 @@
+{%load code%}
+# Dajngo DB.Model Inheritance
+{%lang 'python'%}
+"""
+Django provide us 3 ways of db.model inheritance
+"""
+{%end%}
+
+<p>Abstract model</p>
+{%lang 'python'%}
+"""
+It useful to put some common information in other model. 
+Common fields will be added to each children model.
+Table for parent model would not created.
+"""
+from django.db import models
+class Human(models.Model):
+    name = models.CharField(max_length=40)
+    age = models.PositiveIntegerField()
+
+    class Meta:
+        abstract = True
+
+class Employee(Human):
+    position = models.CharField(max_length=20)
+
+class Student(Human):
+    grade = models.PositiveIntegerField()
+
+"""
+Here we see that django create only 2 tables in DB
+Migrations for 'terminal':
+  terminal/migrations/0004_employee_student.py
+    - Create model Employee
+    - Create model Student
+"""
+{%end%}
+{%lang 'sql'%}
+Схема  |            Имя             |   Тип   | Владелец 
+-------+----------------------------+---------+----------
+public | terminal_employee          | таблица | vlad
+public | terminal_student           | таблица | vlad
+
+SELECT * FROM terminal_employee;
+
+ id | name  | age | position 
+----+-------+-----+----------
+  1 | Smith |  20 | dev
+(1 строка)
+
+SELECT * FROM terminal_student;
+
+ id | name | age | grade 
+----+------+-----+-------
+  1 | Alex |  18 |     2
+(1 строка)
+{%end%}
+<hr>
+
+<p>Multi-table inheritance</p>
+
+{%lang 'python'%}
+"""In this type of inheritance echc model will have own table in database. 
+Children will link with parent model on OneToOneField"""
+class Human(models.Model):
+    name = models.CharField(max_length=40)
+    age = models.PositiveIntegerField()
+
+class Student(Human):
+    grade = models.PositiveIntegerField()
+
+# Geting the child model, django will add parent model fields into child.
+Student.objects.get(name='Sammy')
+#Student: Student object (2)>
+    
+Human.objects.get(name='Sammy')
+#<Human: Human object (2)>
+    
+{%end%}
+
+{%lang 'sql'%}
+SELECT * FROM terminal_human;
+ id | name  | age 
+----+-------+-----
+  1 | Name  |  18
+  2 | Sammy |  20
+
+  SELECT * FROM terminal_student;
+ human_ptr_id | grade 
+--------------+-------
+            2 |     1
+
+{%end%}
+<hr>
+<p>Proxy</p>
+{%lang 'python'%}
+"""In this case django didnt create table to child model,
+so we coudnt as extra field.
+Proxy inheritance proide us only add new behavior and 
+functionality(or rewrite it) to parent model"""
+
+class Human(models.Model):
+    name = models.CharField(max_length=40)
+    age = models.PositiveIntegerField()
+
+    def get_name(self):
+        return str(self.name)
+
+class Student(Human):
+
+    class Meta:
+        proxy = True
+
+    def get_name(self):
+        return str(self.name).upper()
+{%end%}
+
+{%lang 'sql'%}
+Схема  |            Имя             |   Тип   | Владелец 
+--------+----------------------------+---------+----------
+public | terminal_human             | таблица | vlad
+
+SELECT * FROM terminal_human;
+id | name | age 
+----+------+-----
+  1 | Tom  |  20
+{%end%}
+{%lang 'python'%}
+human = Human.objects.get(pk=1)
+human.get_name()
+'Tom'
+        
+student = Student.objects.get(pk=1) 
+student.get_name()
+'TOM'
+{%end%}

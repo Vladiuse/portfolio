@@ -1,0 +1,171 @@
+{% load mptt_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<style>
+    #app{
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+<body>
+    <h1>PWD: <span></span></h1>
+    <div id="app">
+
+    </div>
+    <!-- <div id="row-to-copy" style="display: block;">
+        <p>123</p>
+        <tr class="d-flex" >
+            <td class="col-8 t_name"></td>
+            <td class="col-1 left-border t_type"></td>
+            <td class="col-3 left-border t_date">2023-01-01</td>
+        </tr>
+    </div> -->
+    <table class="table table-borderless">
+        <thead>
+          <tr class="d-flex">
+            <th class="col-8" >Directorys</th>
+            <th class="col-1 left-border">Type</th>
+            <th class="col-3 left-border">Time</th>
+          </tr>
+        </thead>
+
+        <tbody> 
+            
+        </tbody>
+      </table>
+    <textarea name="" id="" cols="30" rows="10"></textarea>
+    <script>
+        let dirsView = $('table tbody')
+        function getTableRow(t_name, t_type, t_date=''){
+            tableRow = $('<tr class="d-flex" ></tr>');
+            name_cell = $('<td class="col-8"></td>');
+            type_cell = $('<td class="col-1"></td>');
+            date_cell = $('<td class="col-3">31231</td>');
+            name_cell.text(t_name)
+            type_cell.text(t_type)
+            tableRow.append(name_cell)
+            tableRow.append(type_cell)
+            tableRow.append(date_cell)
+            return tableRow
+        }
+        let PWD = '/'
+        DIRS = {
+            '/': {
+                'skils/': {
+                    '..':{},
+                    'python/':{'..':{},'xxxx/':{'..':{},}},
+                    'django/':{'..':{},},
+                    'info.txt': 'INFO.txt'
+                },
+                'snipets/': {
+                    '..':{},
+                    'sql/':{'..':{},'sql_test.txt': 'sql information'},
+                    'js/':{'..':{},},
+                    'html/':{'..':{},},
+                },
+            }
+        }
+        DIRS = {
+                {% recursetree nodes %}
+                "{{ node.name }}":  {%if node.file_template%}"{{ node.file_template }}" {%else%} {  {% if not node.is_leaf_node %} {{ children }} {% endif %} },{%endif%}
+                {% endrecursetree %}
+                }
+
+        function cd(path){
+            var list_dirs  =  PWD.split('/')
+            if (path == '..'){
+                list_dirs.pop()
+                list_dirs.pop()
+                list_dirs.push('')
+            }else{
+                list_dirs.pop()
+                list_dirs.push(path)
+            }
+            PWD =  list_dirs.join('/')
+            if (PWD == '') {PWD = '/'}
+            console.log(PWD, 'PWD')
+        }
+
+        function get_content(path=PWD){
+            let dirs_list = path.split('/')
+            dirs_list.pop()
+            content = DIRS
+            for (i in dirs_list){
+                dir = dirs_list[i] + '/'
+                content = content[dir]
+            }
+            return content
+        }
+
+        function ls(){
+            dirsView.empty()
+            content = get_content()
+            for (key in content){
+                var name = key
+                if (key.endsWith('/') || key =='..')
+                {var type = 'dir'}
+                else
+                {var type = 'file'}
+                var row = getTableRow(name, type)
+                row.attr('type', type)
+                row.attr('path',name)
+                $('table tbody').append(row)
+
+            }
+        }
+        function cat(file_fir_path, file_name){
+            let dir_data = get_content(file_fir_path)
+            console.log(dir_data, 'dir_data')
+            return dir_data[file_name]
+        }
+
+
+        dirsView.on('click', 'tr',function(){
+            if ($(this).attr('type') == 'dir')
+                {
+                let path = $(this).attr('path')
+                cd(path)
+                ls()
+                }
+            if ($(this).attr('type') == 'file'){
+                let file_name = $(this).attr('path')
+                let file_path = PWD + file_name
+                file_data = cat(PWD,file_name)
+                $('textarea').text(file_data)
+            }            
+            ShowPWD()
+        })
+
+        function ShowPWD(){
+            $('#pwd').text(PWD)
+        }
+
+
+
+        ls()
+        ShowPWD()
+    </script>
+    <script>
+        
+    </script>
+</body>
+</html>
+
+
+
+
+
+<!-- <script>
+    DIRS = {
+    {% recursetree nodes %}
+    "{{ node.name }}": { {% if not node.is_leaf_node %} {{ children }}{% endif %} },
+    {% endrecursetree %}
+    }
+</script> -->
