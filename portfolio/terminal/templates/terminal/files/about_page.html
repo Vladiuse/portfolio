@@ -1,7 +1,6 @@
 {%load code%}
 <h1>Chose project from top bar or table on left side of page with directorys and files too see more information.</h1>
 <p>Its organized like a file system.</p>
-<br>
 <!-- <pre>
  _ __  _   _| |__ | |_ ___  _ __
 | '_ \| | | | '_ \| __/ _ \| '_ \
@@ -18,79 +17,29 @@
 #        #     #   #    #  ####  #    #
 
 </pre> -->
-<br>
 <p>Structure of files:</p>
 <pre>
+/
 |   about_page.html
 │
 └───projects
 │   │   # info about my projects
+│   │   # if it startswith W_*** - it project i use in my work
 │   │   ...
-│   │
-│   └───subfolder1
-│       │   file111.txt
-│       │   file112.txt
-│       │   ...
-│   
 └───snipets
 |    │   # examples of snipets
-|    │   ....
-|
+│    │
+│    └───python
+│    |   # files..
+│    |   ...
+│    └───django
+│    |   # files..
+│    |   ...
+│    └───SQL
+│    |   # files..
+│    |   ...
+│   
 └───skils
 │   # my skils
 │   ....
 </pre>
-
-
-{%lang 'python' %}
-def get_structure_of_templates(path, obj, relpath=''):
-    objects_in_dir = os.listdir(path)
-    objects_in_dir.sort()
-    for item in os.listdir(path):
-        item_path = os.path.join(path, item)
-        if os.path.isfile(item_path):
-            file_size = os.path.getsize(item_path)
-            file_data = {
-                'size': str(file_size) + ' bytes',
-                'path': os.path.relpath(item_path, relpath),
-            }
-            obj.update({item: file_data})
-        else:
-            item = item + '/'
-            if not item in obj:
-                obj.update({item: {}})
-            get_structure_of_templates(item_path, obj[item], relpath)
-{%end%}
-{%lang 'sql' %}
--- some coment
-SELECT id,app,name FROM django_migrations
-WHERE id NOT IN (1,2,3)
-GROUP BY app ORDER BY name DESC;
-{%end%}
-<pre>
- id |     app      |                   name
-----+--------------+------------------------------------------
-  1 | contenttypes | 0001_initial
-  2 | auth         | 0001_initial
-  3 | admin        | 0001_initial
-</pre>
-{%lang 'js' %}
-// timer
-function showLoading(){
-    $('#load-bar').show()
-    let string = '='.repeat(counter) + '>'+'-'.repeat(MAX - counter)
-    string = '['+string+']'
-    $('#load-line').text(string)
-}
-function cat(file_fir_path, file_name){
-    let dir_data = get_content(file_fir_path)
-    // console.log(dir_data, 'dir_data')
-    // console.log(file_fir_path, 'file_fir_path')
-    let file = dir_data[file_name]
-    let file_path  = file['path']
-    console.log(file_path, 'file_path')
-    if (file_path != lastFileId) {getFileContent(file_path)}
-    lastFileId = file_path
-    // return dir_data[file_name]
-}
-{%end%}
