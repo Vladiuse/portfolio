@@ -500,7 +500,7 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                   <div>
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#resumeModal">{{"Web version..."|span }}</a></li>
-                    <li><a class="dropdown-item" href="#">{{"PDF version..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#imageModal">{{"PDF version..."|span }}</a></li>
                   </div>
                 </ul>
               </li>
@@ -685,7 +685,7 @@
         </div>
       </div>
 
-        <!-- Modal SETTINNGS-->
+<!-- Modal SETTINNGS-->
   <div class="modal" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true" data-bs-backdrop="false">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -709,6 +709,63 @@
       </div>
     </div>
   </div>
+  <!-- Modal SETTINNGS-->
+<style>
+
+
+    #for-img{
+        width: 60vh;
+        height: 50vh;
+    }
+    #imageModal #slider{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    #imageModal #slider #prev,
+    #imageModal #slider #next{
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+    }
+
+    .screenshot-button{
+        color: var(--terminal-font-color);
+        background-color: var(--terminal-background);
+        border: 1px solid var(--terminal-font-color);
+    }
+    .screenshot-button:hover{
+        color: var(--terminal-background);
+        background-color: var(--terminal-font-color);
+        border: 1px solid var(--terminal-background);
+    }
+</style>
+
+  <!-- Modal IMAGES-->
+  <div class="modal" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" >[X]</button>
+
+        </div>
+        <div class="modal-body">
+            <h5 class="title"><span>ScreenShots</span></h5>
+            <div id="slider">
+                <div id="prev">[<]</div>
+                <div id="for-img" style="background-repeat: no-repeat;background-position: center;background-size: 100%;"></div>
+                <div id="next">[>]</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-bs-dismiss="modal" >[< Close >]</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal IMAGES-->
  
   <script>
     $('.modal button').click(function(){
@@ -1047,10 +1104,42 @@
         ls()
         cat(path,file_name)
     }
+    $('.main').on('click', '.screenshot-button', function(){
+        sliderImages = $(this).data('slider').split(',')
+        sliderCounter = 0
+        showImageSlider()
+    })
 
-
+    var sliderCounter = 0;
+    var sliderImages = []
+    var screenShowAddPath = '/static/terminal/'
+    // function addImagesToSlider(images_likns){
+    //     console.log('addImagesToSlider')
+    //     console.log( images_likns.split(','), 'xxxx')
+    //     sliderImages  = images_likns.split(',')
+    //     sliderCounter = 0
+    //     showImageSlider()
+    // }
+    function showImageSlider(){
+        let imageUrl = sliderImages[sliderCounter]
+        console.log(imageUrl, 'CSS')
+        $('#for-img').css('background-image', 'url("' + screenShowAddPath + imageUrl + '")');
+        // $('#imageModal #slider img').attr('src', sliderImages[sliderCounter])
+    }
+    $('#slider #prev').click(function(){
+        if (sliderCounter == 0){sliderCounter = sliderImages.length - 1}
+        else {sliderCounter = sliderCounter - 1}
+        showImageSlider()
+    })
+    $('#slider #next').click(function(){
+        if (sliderCounter == sliderImages.length - 1) {sliderCounter = 0}
+        else{sliderCounter = sliderCounter + 1}
+        showImageSlider()
+    })
 
 </script>
-
+<script>
+    
+</script>
 </body>
 </html>
