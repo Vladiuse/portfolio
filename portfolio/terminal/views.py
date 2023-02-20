@@ -11,15 +11,15 @@ from django.conf import settings
 from .snipets_view import get_templates
 from pprint import pprint
 
-
-
-
-
+DEFAULT_COLOR_THEME = 'blue'
+AVAILABLE_COLOR_THEMES = [DEFAULT_COLOR_THEME, 'purple', 'green']
 START_PAGE_FILE_ID = 'terminal/files/about_page.html'
 
 
 def index(request):
     color_theme = request.COOKIES.get('color_theme')
+    if color_theme not in AVAILABLE_COLOR_THEMES:
+        color_theme = DEFAULT_COLOR_THEME
     nodes = Directory.objects.all()
     start_file_id = START_PAGE_FILE_ID
     DIRS = get_templates(to_json=False)
