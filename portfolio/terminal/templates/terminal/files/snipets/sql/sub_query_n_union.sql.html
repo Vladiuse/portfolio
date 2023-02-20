@@ -1,0 +1,30 @@
+{%load code%}
+<a href="https://sql-academy.org/ru/trainer/tasks/60">Link on task sql-academy.org</a>
+{%lang 'sql'%}
+SELECT teacher
+FROM (
+    (
+      SELECT teacher,
+        class
+      FROM Schedule
+      WHERE class IN (
+          SELECT id
+          FROM Class
+          WHERE name lIKE '11%'
+        )
+    )
+    UNION
+    (
+      SELECT teacher,
+        class
+      FROM Schedule
+      WHERE class IN (
+          SELECT id
+          FROM Class
+          WHERE name lIKE '11%'
+        )
+    )
+  ) as xxx
+GROUP BY teacher
+HAVING COUNT(*) = 2;
+{%end%}

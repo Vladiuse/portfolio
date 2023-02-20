@@ -901,7 +901,7 @@
             content = get_content()
             console.log(content, 'xxx')
             if (PWD != '/'){
-                var row = getTableRow('..', 'dir')
+                var row = getTableRow('/'+'..', 'dir')
                 row.attr('type', 'dir')
                 row.attr('path','..')
                 dirsView.append(row)
@@ -916,7 +916,7 @@
                 var name = key
                 var path = name
                 if (key.endsWith('/') || key =='..')
-                {var type = 'dir';var size = '...';name=name.slice(0, name.length - 1)}
+                {var type = 'dir';var size = '...';name='/'+name.slice(0, name.length - 1)}
                 else
                 {var type = 'file';var size = content[name]['size']}
                 var row = getTableRow(name, type, size)

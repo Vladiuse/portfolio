@@ -1,1 +1,21 @@
 {%load code%}
+# Examples of qyerys
+<p>Grouping on ManyToMany with filter</p>
+
+{%lang 'python'%}
+"""Models"""
+class Element(models.Model):
+    ...
+
+
+class Site(models.Model):
+    ...
+
+class SiteElementRecord(models.Model):
+    site = models.ForeignKey(Site, on_delete=models.CASCADE,)
+    element = models.ForeignKey(Element, on_delete=models.CASCADE,)
+    is_collect = models.BooleanField(blank=True, default=False, verbose_name='Элементы собраны')
+
+"""Query"""
+Element.objects.annotate(count=Count('sites',filter=Q(siteelementrecord__is_collect=False)))
+{%end%}

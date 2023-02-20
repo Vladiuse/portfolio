@@ -1,0 +1,18 @@
+{%load code%}
+<a href="https://sql-academy.org/ru/trainer/tasks/70">Link on task sql-academy.org</a>
+{%lang 'sql'%}
+SELECT 'economy' as category,
+  COUNT(*) as count
+FROM Rooms
+WHERE price <= 100
+UNION
+SELECT 'comfort' as category,
+  COUNT(*) as count
+FROM Rooms
+WHERE price BETWEEN 101 AND 199
+UNION
+SELECT 'premium' as category,
+  COUNT(*) as count
+FROM Rooms
+WHERE price >= 200
+{%end%}

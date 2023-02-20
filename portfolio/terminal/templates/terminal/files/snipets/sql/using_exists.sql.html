@@ -1,0 +1,17 @@
+{%load code%}
+<a href="https://sql-academy.org/ru/trainer/tasks/68">Link on task sql-academy.org</a>
+{%lang 'sql'%}
+SELECT room_id,
+  Users.name as name,
+  end_date
+FROM Reservations
+  JOIN Users ON Users.id = Reservations.user_id
+WHERE EXISTS (
+    SELECT room_id as r,
+      MAX(end_date) as date
+    FROM Reservations
+    GROUP BY room_id
+    HAVING r = room_id
+      AND date = end_date
+  )
+{%end%}

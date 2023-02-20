@@ -1,0 +1,89 @@
+{%load code%}
+{%lang 'sql'%}
+DROP TABLE IF EXISTS book_author;
+DROP TABLE IF EXISTS Book;
+DROP TABLE IF EXISTS Author;
+
+
+CREATE TABLE Book (id SERIAL PRIMARY KEY,
+name CHAR(30) UNIQUE NOT nULL CHECK(name != '')
+);
+
+CREATE TABLE Author (id SERIAL PRIMARY KEY, 
+name CHAR(20) UNIQUE NOT NULL CHECK(name != '')
+);
+
+CREATE TABLE book_author
+(book_id INT NOT NULL,
+author_id  INT NOT NULL,
+UNIQUE (book_id, author_id),
+FOREIGN KEY (book_id) REFERENCES Book(id),
+FOREIGN KEY (author_id) REFERENCES Author(id)
+);
+
+
+
+INSERT INTO Book
+(name)
+VALUES
+('Dracula'),
+('Karenina'),
+('GoldFish'),
+('Onegin'),
+('Sunday'),
+('Peace and War');
+
+INSERT INTO Author
+(name)
+VALUES
+('Jack London'),
+('Pushkin'),
+('Tolstoi'),
+('Bram Stoker');
+
+
+INSERT INTO book_author
+(book_id, author_id)
+VALUES
+(
+(SELECT id FROM Book WHERE name = 'Dracula'),
+(SELECT id FROM Author WHERE name = 'Bram Stoker')
+),
+(
+(SELECT id FROM Book WHERE name = 'Karenina'),
+(SELECT id FROM Author WHERE name = 'Tolstoi')
+),
+(
+(SELECT id FROM Book WHERE name = 'Sunday'),
+(SELECT id FROM Author WHERE name = 'Tolstoi')
+),
+(
+(SELECT id FROM Book WHERE name = 'Onegin'),
+(SELECT id FROM Author WHERE name = 'Pushkin')
+),
+(
+(SELECT id FROM Book WHERE name = 'GoldFish'),
+(SELECT id FROM Author WHERE name = 'Pushkin')
+),
+(
+(SELECT id FROM Book WHERE name = 'Peace and War'),
+(SELECT id FROM Author WHERE name = 'Tolstoi')
+);
+
+
+
+SELECT A.name AS author_name, B.name AS book_name
+FROM book_author
+JOIN Book AS B ON B.id = book_author.book_id
+JOIN Author AS A ON A.id = book_author.author_id
+ORDER BY author_name;
+
+
+
+SELECT A.name AS author_name, 
+COUNT(book_author.book_id) as books_count 
+FROM book_author
+RIGHT JOIN Author AS A ON A.id = book_author.author_id
+GROUP BY A.name
+ORDER BY books_count DESC;
+{%end%}

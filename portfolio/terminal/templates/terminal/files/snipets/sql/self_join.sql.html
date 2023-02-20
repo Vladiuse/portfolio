@@ -1,0 +1,11 @@
+{%load code%}
+<a href="https://www.pgexercises.com/questions/joins/sub.html">Link on task pgexercises.com</a>
+{%lang 'sql'%}
+SELECT  DISTINCT
+firstname || ' ' || surname as member,
+(SELECT firstname || ' ' || surname 
+FROM cd.members WHERE members.memid = M.recommendedby)
+as recommender
+FROM cd.members as M
+ORDER BY member;
+{%end%}

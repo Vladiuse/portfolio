@@ -1,0 +1,23 @@
+{%load code%}
+<a href="https://sql-academy.org/ru/trainer/tasks/71">Link on task sql-academy.org</a>
+{%lang 'sql'%}
+SELECT ROUND(
+    (
+      SELECT COUNT(id)
+      FROM Users
+      WHERE id IN (
+          SELECT DISTINCT user_id
+          FROM Reservations
+        )
+        OR id IN (
+          SELECT owner_id
+          FROM Rooms
+            LEFT JOIN Reservations ON Reservations.room_id = Rooms.id
+          GROUP BY owner_id
+          HAVING COUNT(Reservations.id) != 0
+        )
+    ) / COUNT(*) * 100,
+    2
+  ) as percent
+FROM Users;
+{%end%}
