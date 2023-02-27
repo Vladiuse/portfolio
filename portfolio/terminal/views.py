@@ -42,7 +42,6 @@ def test(request):
 
 def get_file_content(request):
     file_id = request.GET['file_id']
-    print(file_id, 'xxxxx')
     content = loader.render_to_string(file_id, {}, request)
     time.sleep(0.5)
     result = {
