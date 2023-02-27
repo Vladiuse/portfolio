@@ -740,6 +740,15 @@
         background-color: var(--terminal-font-color);
         border: 1px solid var(--terminal-background);
     }
+    #slider-img-wrap{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    #slider-img-wrap p{
+        padding: 0 10%;
+    }
 </style>
 
   <!-- Modal IMAGES-->
@@ -755,7 +764,10 @@
             <h5 class="title"><span>ScreenShots</span></h5>
             <div id="slider">
                 <div id="prev">[<]</div>
-                <div id="for-img" style="background-repeat: no-repeat;background-position: center;background-size: 100%;"></div>
+                <div id="slider-img-wrap">
+                    <div id="for-img" style="background-repeat: no-repeat;background-position: center;background-size: 100%;"></div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, adipisci cupiditate necessitatibus nisi vero omnis, ducimus aperiam commodi odio dolorum at. Esse ullam nobis mollitia illum, similique ex. Optio, ducimus!</p>
+                </div>
                 <div id="next">[>]</div>
             </div>
         </div>
@@ -1105,7 +1117,7 @@
         cat(path,file_name)
     }
     $('.main').on('click', '.screenshot-button', function(){
-        sliderImages = $(this).data('slider').split(',')
+        // sliderImages = $(this).data('slider').split(',')
         sliderCounter = 0
         showImageSlider()
     })
@@ -1113,6 +1125,11 @@
     var sliderCounter = 0;
     var sliderImages = []
     var screenShowAddPath = '/static/terminal/'
+    var sliderData = []
+
+    function addSliderData(data){
+        sliderData = data
+    }
     // function addImagesToSlider(images_likns){
     //     console.log('addImagesToSlider')
     //     console.log( images_likns.split(','), 'xxxx')
@@ -1121,18 +1138,20 @@
     //     showImageSlider()
     // }
     function showImageSlider(){
-        let imageUrl = sliderImages[sliderCounter]
+        let imageUrl = sliderData[sliderCounter][0]
+        let imageDesc = sliderData[sliderCounter][1]
         console.log(imageUrl, 'CSS')
         $('#for-img').css('background-image', 'url("' + screenShowAddPath + imageUrl + '")');
+        $('#slider-img-wrap p').text(imageDesc);
         // $('#imageModal #slider img').attr('src', sliderImages[sliderCounter])
     }
     $('#slider #prev').click(function(){
-        if (sliderCounter == 0){sliderCounter = sliderImages.length - 1}
+        if (sliderCounter == 0){sliderCounter = sliderData.length - 1}
         else {sliderCounter = sliderCounter - 1}
         showImageSlider()
     })
     $('#slider #next').click(function(){
-        if (sliderCounter == sliderImages.length - 1) {sliderCounter = 0}
+        if (sliderCounter == sliderData.length - 1) {sliderCounter = 0}
         else{sliderCounter = sliderCounter + 1}
         showImageSlider()
     })
