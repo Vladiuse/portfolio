@@ -4,7 +4,7 @@
 <p>GitHub: <a href="https://github.com/Vladiuse/portfolio">https://github.com/Vladiuse/portfolio</a></p>
 <p>This is the project of current weppage.</p>
 <br>
-<p>For highlite examples of code use Pygments library and write a few custom tags:</p>
+<p>For highlight examples of code used Pygments library and write a few custom tags:</p>
 {%lang 'python'%}
 from pygments import highlight
 from pygments.lexers import PythonLexer, HtmlLexer, JavascriptLexer, CssLexer, SqlLexer
@@ -59,7 +59,7 @@ def get_structure_of_templates(path, obj, relpath=''):
             get_structure_of_templates(item_path, obj[item], relpath)
 {%end%}
 <hr>
-For imitate walk thhrow dirs create a few functions, whit the same behavior like a few Linux commands: cat, ls and PWD.
+For imitate walk through directories create a few functions, whit the same behavior like a few Linux commands: cat, ls and $PWD.
 {%lang 'js%}
 var PWD = '/';
 function cd(path){
