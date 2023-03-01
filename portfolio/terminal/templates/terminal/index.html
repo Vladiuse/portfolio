@@ -1,4 +1,5 @@
 {%load code%}
+{%load static%}
 <!DOCTYPE html>
 <html lang="en" class="{%if color_theme %}{{color_theme}}{%else%}blue{%endif%}">
 <head>
@@ -584,7 +585,7 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                   <div>
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#resumeModal">{{"Web version..."|span }}</a></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#imageModal">{{"PDF version..."|span }}</a></li>
+                    <li><a class="dropdown-item" href="{%static 'terminal/vlad_kozak_cs.pdf'%}">{{"PDF version..."|span }}</a></li>
                   </div>
                 </ul>
               </li>
