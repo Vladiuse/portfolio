@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!--ICONS-->
+<script src="https://kit.fontawesome.com/da43c2ea11.js" crossorigin="anonymous"></script>
     <style>
         {%code_style%}
         .highlight{
@@ -531,10 +533,51 @@
 }
 
   </style>
+  <style>
+
+    #mobile-version{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    #mobile-version i{
+        font-size: 150px;
+    }
+    #mobile-version h1{
+        font-size: 35px;
+    }
+    #mobile-version p{
+        font-size: 20px;
+    }
+    #mobile-version a{
+        color: white;
+    }
+
+    @media (min-width: 992px){
+        #mobile-version{
+            display: none;
+        }
+    }
+    @media (max-width: 992px){
+        .main{
+            display: none;
+        }
+        nav.navbar{
+            display: none;
+        }
+
+    }
+  </style>
 <body>
+    <div id="mobile-version" >
+        <i class="fa-solid fa-laptop"></i>
+        <h1>Sorry, avaible only on desctop.</h1>
+        <p>Link on my <a href="{%static 'terminal/vlad_kozak_cs.pdf'%}" target="_blank">CV</a></p>
+    </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <!-- <a class="navbar-brand" href="#">Navbar scroll</a> -->
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -554,7 +597,6 @@
                   <div>
                     <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'tetris.py');">{{"Brick Game"|span }}</li>
                     <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'w_LinkChecker.py');">{{"Link Checker..."|span }}</a></li>
-                    <!-- <li><a class="dropdown-item" href="#">{{"Archive of sites..."|span }}</a></li> -->
                     <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'simple_cataloge.py');">{{"Simple cataloge..."|span }}</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" onclick="jumpToFile('/projects/', 'portfolio_site.html');">{{"Portfolio site..."|span }}</a></li>
@@ -607,19 +649,11 @@
       </nav>
       <div class="main">
         <div class="row">
-            <div class="col right">
+            <div class="col-6 right">
                 <div class="window">
                     <div class="top">
                         <div>
                         <h1>Hellow. My name is Vlad, i'm a junior web developer. Here my portfolio site with my projects and some information about me.</h1>
-                        <br><br>
-                        <!-- <div>
-                            <p>[==>------]25%</p>
-                        <p>[====<span class="flip-x">\</span>>---]55%</p>
-                        <p>[======<span class="flip-y">\</span>>-]85%</p>
-                        <span class="flip-x">\</span>
-                        <span class="flip-y">\</span>
-                        </div> -->
                         </div>
                         
                         <table class="table table-borderless" id="dirs">
@@ -641,7 +675,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col left">
+            <div class="col-6 left">
                 <div class="window">
                     <div class="top">
                         
