@@ -14,14 +14,15 @@ def get_structure_of_templates(path, obj, relpath=''):
     for item in os.listdir(path):
         item_path = os.path.join(path, item)
         if os.path.isfile(item_path):
-            file_size = os.path.getsize(item_path)
-            file_path  = os.path.relpath(item_path, relpath)
-            file_data = {
-                'size': str(file_size) + ' bytes',
-                'path': file_path,
-            }
-            item = drop_html_format(item)
-            obj.update({item: file_data})
+            if not os.path.basename(item_path).startswith('__'):
+                file_size = os.path.getsize(item_path)
+                file_path  = os.path.relpath(item_path, relpath)
+                file_data = {
+                    'size': str(file_size) + ' bytes',
+                    'path': file_path,
+                }
+                item = drop_html_format(item)
+                obj.update({item: file_data})
         else:
             item = item + '/'
             if not item in obj:
