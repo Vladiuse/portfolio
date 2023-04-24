@@ -1,0 +1,41 @@
+{%load code%}
+<h1># LinkChecker v2 (work project)</h1>
+<p>GitHub: <a href="https://github.com/Vladiuse/-OI-AMK/tree/main/HelloDjango/checker_2">https://github.com/Vladiuse/-OI-AMK/tree/main/HelloDjango/checker_2</a></p>
+<p>More actuall code see in develop branch</p>
+<p>My biggest project. Develop in 2 month, ~2k lines of code. Use this every day to make my job more easily. Also it used by my coworcers(6 employees).</p>
+
+<button class="screenshot-button" href="#" data-bs-toggle="modal" data-bs-target="#imageModal"
+data-slider="screens/manual_1.jpg,screens/manual_2.jpg" onclick="addSliderData([
+    ['screens/checker_1.jpg', 'Main page with form, enter the url you want to check'],
+    ['screens/checker_2.jpg', 'Checker interface'],
+    ['screens/checker_3.jpg', 'Open documentations in checker, you dont need go and serch it, just click on <?> in check list'],
+    ['screens/checker_4.jpg', 'Example of different errors and messages'],
+    ['screens/checker_5.jpg', 'Can help to find double images'],
+    ])"
+>see screenshots</button>
+<p>Work is check simple one page sites, there must:</p>
+<ul>
+    <li>Correct product price and discount</li>
+    <li>Correct product name</li>
+    <li>Set correct lang in admin</li>
+    <li>Exist of some html attributs in form</li>
+    <li>Correct dates and there format</li>
+    <li>No doubles of avatars in comments</li>
+</ul>
+<p>How LinkChecker help?</p>
+<ul>
+    <li>Have dase of product names and search it</li>
+    <li>Mark dates that added by scripts</li>
+    <li>If it find incorect date or date from future - show error</li>
+    <li>Check country in admin and seted language</li>
+    <li>Hightligt all prices,discounts that added by scripts</li>
+    <li>Searching bouble of images, got interface to find see them on site</li>
+    <li>Searching countrys on site, some times it dont must be there</li>
+    <li>Check is rekvisites added on page</li>
+    <li>Show php vars from templates if it not rendered</li>
+</ul>
+<p>It's being decided by load checked site in Iframe, add on page some CSS and JS code and text analize of site on backend.</p>
+<p>Checking type of site, country, language, prices and create a check list this some points for this specific parameters.</p>
+<p>It also joined with my other site, with full documentation and rules of our job, click on one of check point 
+    and desired text and images will load by API in same window.(so you dont need search this information in DOCs.</p>
+<p>Full description of work that checker do <a href="https://vim-store.ru/manual/other.linkchecker">you can read here</a>.</p>
