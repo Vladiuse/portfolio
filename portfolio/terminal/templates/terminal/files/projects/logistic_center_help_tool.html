@@ -1,0 +1,38 @@
+<h1># Auxiliary site for working with the database of the logistics center (Railway)</h1>
+<p>GitHub: <a href="https://github.com/Vladiuse/rw">https://github.com/Vladiuse/rw</a></p>
+<button class="screenshot-button" href="#" data-bs-toggle="modal" data-bs-target="#imageModal"
+data-slider="screens/manual_1.jpg,screens/manual_2.jpg" onclick="addSliderData([
+        ['screens/rw_1.png', 'Compare two files and get result'],
+        ['screens/rw_2.png', 'Compare two files and get result'],
+        ['screens/rw_3.png', 'Load document'],
+        ['screens/rw_4.png', 'view document'],
+        ['screens/rw_5.png', 'edit document'],
+        ['screens/rw_6.png', 'use some filters'],
+        ['screens/rw_7.png', 'print document'],
+        ['screens/rw_8.png', 'find location of container and draw scheme'],
+    ])"
+>see screenshots</button>
+<h2># Essence</h2>
+<p>The old FOXPro database is used (Microsoft ended its support in 2015) Data from it can only be obtained as a Word document. There is also a database of the head office (communication with it is also through the generation of Word documents)
+</p>
+<h1># What are the problems</h1>
+<ul>
+<li>invalid data</li>
+<li>Only employees of the center have access to data</li>
+<li>database out of sync</li>
+<li>there is no possibility of working with data (getting pivot tables and other things)</li>
+<li>List verification (for database synchronization)</li>
+</ul>
+<p>Since there is a database of the station itself and the head office (with it "communication also occurs by uploading to a word document") discrepancies arise over time. According to the data, the container has already left at the station, at the head office it is listed that it is still at the station. For verification, a form with 2 fields was created, container numbers (regular expressions) are searched in these files and several lists are displayed: which containers are not in one database, which ones are in the second. Also displays containers with incorrect checksum.
+</p>
+<h1># Validation</h1>
+<p>To solve this problem, I fill my database with data from word files. There is a form for this, you can add the file itself or text from it to the form (as doc files are an old format, it’s not always possible to read it) A table is formed with all uploaded files, and how many containers are in each of them. From the document, melons from different columns are pulled and written in my database.
+</p>
+<p>An employee of the center can go to the desired file and see if there are any incorrect container numbers there. This is done using a special formula (the checksum is calculated). The user can view the summary table for each of the clients (a raw sql query is made). With the help of aggregate functions of the database, the downtime of containers in days, as well as the average downtime for each client, are displayed. Also searched from a record with incomplete data (js filter). Added "copy" button for convenient transfer of received data to Excel.
+</p>
+<h1># Clients</h1>
+<p>Clients also have access to files, but will only get records from the database for their containers. For them, printing of the order document with auto-substitution of data is also implemented.
+</p>
+
+<h1># Finding container disdoc</h1>
+<p>In 2 fields, a search is made for the last documents of the container, the lot number (the place where it is located at the station) and the method of loading are displayed. Also, a diagram of the location of the site on the page (canvas) is drawn</p>
