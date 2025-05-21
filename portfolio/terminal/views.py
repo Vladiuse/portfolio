@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from django.template import Template, loader
 import time
-from .snipets_view import get_templates
 
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.template import loader
+
+from .snipets import get_templates
 
 DEFAULT_COLOR_THEME = 'blue'
 AVAILABLE_COLOR_THEMES = [DEFAULT_COLOR_THEME, 'purple', 'green']
@@ -25,8 +26,7 @@ def index(request):
 
 
 def test(request):
-    content = {
-    }
+    content = {}
     return render(request, 'terminal/test.html', content)
 
 

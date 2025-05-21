@@ -1,8 +1,8 @@
 from django import template
 from django.utils.safestring import mark_safe
 from pygments import highlight
-from pygments.lexers import PythonLexer, HtmlLexer, JavascriptLexer, CssLexer, SqlLexer
 from pygments.formatters import HtmlFormatter
+from pygments.lexers import HtmlLexer, JavascriptLexer, PythonLexer, SqlLexer
 
 register = template.Library()
 LEXERS = {
@@ -12,20 +12,22 @@ LEXERS = {
     'html': HtmlLexer,
 }
 
-def del_quotes(value):
+
+def del_quotes(value: str) -> str:
     value = value.replace('"', '')
-    value = value.replace("'", '')
-    return value
+    return value.replace("'", '')
+
+
 
 def get_colored_code(code, lexer):
     return highlight(code, lexer(encodings='utf-8'), HtmlFormatter())
 
 
 @register.filter(name='span')
-def span_f_letter(value):
+def span_f_letter(value: str) -> str:
     result = []
     for word in value.split():
-        result.append(f'<span>{word[0]}</span>'+word[1:])
+        result.append(f'<span>{word[0]}</span>' + word[1:])
     return mark_safe(' '.join(result))
 
 
@@ -51,26 +53,26 @@ def lang(parser, token):
     return CodeExaple(node, lexer)
 
 
-
 class CodeExaple(template.Node):
-    def __init__(self, node,lexer):
+    def __init__(self, node, lexer):
         self.node = node
         self.lexer = lexer
 
-    def render(self, context):
+    def render(self, context) -> str:
         output = self.node.render(context)
         result = get_colored_code(output, self.lexer)
         return mark_safe(result)
+
 
 class ScreenHighLight(template.Node):
     def __init__(self, node):
         self.node = node
 
-    def render(self, context):
+    def render(self, context) -> str:
         value = self.node.render(context)
         value = value.strip()
         rows = value.split('\n')
-        result  = ''
+        result = ''
         for row in rows:
             pixel_on = '[x]'
             pixel_off = '[ ]'
@@ -83,6 +85,6 @@ class ScreenHighLight(template.Node):
 
 
 @register.inclusion_tag('terminal/slider.html')
-def slider(poll):
+def slider(poll) -> dict:
     images = poll.image_set.all()
     return {'images': images}
