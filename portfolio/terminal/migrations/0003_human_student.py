@@ -5,26 +5,35 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('terminal', '0002_delete_employee_delete_student'),
+        ("terminal", "0002_delete_employee_delete_student"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Human',
+            name="Human",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=40)),
-                ('age', models.PositiveIntegerField()),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=40)),
+                ("age", models.PositiveIntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='Student',
+            name="Student",
             fields=[
-                ('human_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='terminal.human')),
-                ('grade', models.PositiveIntegerField()),
+                (
+                    "human_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="terminal.human",
+                    ),
+                ),
+                ("grade", models.PositiveIntegerField()),
             ],
-            bases=('terminal.human',),
+            bases=("terminal.human",),
         ),
     ]

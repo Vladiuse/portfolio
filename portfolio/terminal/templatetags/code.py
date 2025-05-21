@@ -6,49 +6,48 @@ from pygments.lexers import HtmlLexer, JavascriptLexer, PythonLexer, SqlLexer
 
 register = template.Library()
 LEXERS = {
-    'python': PythonLexer,
-    'sql': SqlLexer,
-    'js': JavascriptLexer,
-    'html': HtmlLexer,
+    "python": PythonLexer,
+    "sql": SqlLexer,
+    "js": JavascriptLexer,
+    "html": HtmlLexer,
 }
 
 
 def del_quotes(value: str) -> str:
-    value = value.replace('"', '')
-    return value.replace("'", '')
-
+    value = value.replace('"', "")
+    return value.replace("'", "")
 
 
 def get_colored_code(code, lexer):
-    return highlight(code, lexer(encodings='utf-8'), HtmlFormatter())
+    return highlight(code, lexer(encodings="utf-8"), HtmlFormatter())
 
 
-@register.filter(name='span')
+@register.filter(name="span")
 def span_f_letter(value: str) -> str:
     result = []
     for word in value.split():
-        result.append(f'<span>{word[0]}</span>' + word[1:])
-    return mark_safe(' '.join(result))
+        result.append(f"<span>{word[0]}</span>" + word[1:])
+    return mark_safe(" ".join(result))
 
 
-@register.tag(name='pixel_screen')
+@register.tag(name="pixel_screen")
 def tetris_screen_highlight(parser, token):
-    node = parser.parse(('end',))
+    node = parser.parse(("end",))
     parser.delete_first_token()
     return ScreenHighLight(node)
 
 
-@register.simple_tag(name='code_style')
-def colors(style='dracula'):
-    return mark_safe(HtmlFormatter(style=style).get_style_defs('.highlight'))
+@register.simple_tag(name="code_style")
+def colors(style="dracula"):
+    return mark_safe(HtmlFormatter(style=style).get_style_defs(".highlight"))
 
 
-@register.tag(name='lang')
+@register.tag(name="lang")
 def lang(parser, token):
     tag_name, lang = token.split_contents()
     lang = del_quotes(lang)
     lexer = LEXERS[lang]
-    node = parser.parse(('end',))
+    node = parser.parse(("end",))
     parser.delete_first_token()
     return CodeExaple(node, lexer)
 
@@ -71,11 +70,11 @@ class ScreenHighLight(template.Node):
     def render(self, context) -> str:
         value = self.node.render(context)
         value = value.strip()
-        rows = value.split('\n')
-        result = ''
+        rows = value.split("\n")
+        result = ""
         for row in rows:
-            pixel_on = '[x]'
-            pixel_off = '[ ]'
+            pixel_on = "[x]"
+            pixel_off = "[ ]"
             pixel_on_tag = '<div class="pixel on"><div>%s</div></div>'
             pixel_off_tag = '<div class="pixel"><div>%s</div></div>'
             row = row.replace(pixel_on, pixel_on_tag)
@@ -84,7 +83,7 @@ class ScreenHighLight(template.Node):
         return mark_safe(result)
 
 
-@register.inclusion_tag('terminal/slider.html')
+@register.inclusion_tag("terminal/slider.html")
 def slider(poll) -> dict:
     images = poll.image_set.all()
-    return {'images': images}
+    return {"images": images}

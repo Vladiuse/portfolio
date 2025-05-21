@@ -5,35 +5,34 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('terminal', '0005_human_student'),
+        ("terminal", "0005_human_student"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('img', models.ImageField(upload_to='images')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("img", models.ImageField(upload_to="images")),
             ],
         ),
         migrations.CreateModel(
-            name='Poll',
+            name="Poll",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=10)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=10)),
             ],
         ),
         migrations.DeleteModel(
-            name='Human',
+            name="Human",
         ),
         migrations.DeleteModel(
-            name='Student',
+            name="Student",
         ),
         migrations.AddField(
-            model_name='image',
-            name='poll',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='terminal.poll'),
+            model_name="image",
+            name="poll",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="terminal.poll"),
         ),
     ]

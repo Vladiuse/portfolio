@@ -4,29 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('terminal', '0004_remove_student_human_ptr_delete_human_delete_student'),
+        ("terminal", "0004_remove_student_human_ptr_delete_human_delete_student"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Human',
+            name="Human",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=40)),
-                ('age', models.PositiveIntegerField()),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("name", models.CharField(max_length=40)),
+                ("age", models.PositiveIntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='Student',
-            fields=[
-            ],
+            name="Student",
+            fields=[],
             options={
-                'proxy': True,
-                'indexes': [],
-                'constraints': [],
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
             },
-            bases=('terminal.human',),
+            bases=("terminal.human",),
         ),
     ]
