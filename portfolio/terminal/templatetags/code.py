@@ -5,6 +5,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import HtmlLexer, JavascriptLexer, PythonLexer, SqlLexer
 
 register = template.Library()
+lexer_type = HtmlLexer | JavascriptLexer | PythonLexer | SqlLexer
 LEXERS = {
     "python": PythonLexer,
     "sql": SqlLexer,
@@ -18,7 +19,7 @@ def del_quotes(value: str) -> str:
     return value.replace("'", "")
 
 
-def get_colored_code(code, lexer):
+def get_colored_code(code: str, lexer: lexer_type) -> str:
     return highlight(code, lexer(encodings="utf-8"), HtmlFormatter())
 
 
@@ -31,19 +32,19 @@ def span_f_letter(value: str) -> str:
 
 
 @register.tag(name="pixel_screen")
-def tetris_screen_highlight(parser, token):
+def tetris_screen_highlight(parser, token) -> 'ScreenHighLight':
     node = parser.parse(("end",))
     parser.delete_first_token()
     return ScreenHighLight(node)
 
 
 @register.simple_tag(name="code_style")
-def colors(style="dracula"):
+def colors(style: str = "dracula") -> str:
     return mark_safe(HtmlFormatter(style=style).get_style_defs(".highlight"))
 
 
 @register.tag(name="lang")
-def lang(parser, token):
+def lang(parser, token) -> 'CodeExaple':
     tag_name, lang = token.split_contents()
     lang = del_quotes(lang)
     lexer = LEXERS[lang]
@@ -57,7 +58,7 @@ class CodeExaple(template.Node):
         self.node = node
         self.lexer = lexer
 
-    def render(self, context) -> str:
+    def render(self, context: dict) -> str:
         output = self.node.render(context)
         result = get_colored_code(output, self.lexer)
         return mark_safe(result)
@@ -67,7 +68,7 @@ class ScreenHighLight(template.Node):
     def __init__(self, node):
         self.node = node
 
-    def render(self, context) -> str:
+    def render(self, context: dict) -> str:
         value = self.node.render(context)
         value = value.strip()
         rows = value.split("\n")
