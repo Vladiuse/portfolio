@@ -34,7 +34,7 @@ def get_structure_of_templates(path: str, obj: dict, relpath: str = "") -> None:
             get_structure_of_templates(item_path, obj[item], relpath)
 
 
-def get_templates(to_json=True) -> dict | str:
+def get_templates(to_json=True):
     ROOT = "/"
     DIR = {
         ROOT: {},
