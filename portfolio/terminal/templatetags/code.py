@@ -5,7 +5,6 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import HtmlLexer, JavascriptLexer, PythonLexer, SqlLexer
 
 register = template.Library()
-lexer_type = HtmlLexer | JavascriptLexer | PythonLexer | SqlLexer
 LEXERS = {
     "python": PythonLexer,
     "sql": SqlLexer,
@@ -19,7 +18,7 @@ def del_quotes(value: str) -> str:
     return value.replace("'", "")
 
 
-def get_colored_code(code: str, lexer: lexer_type) -> str:
+def get_colored_code(code: str, lexer) -> str:
     return highlight(code, lexer(encodings="utf-8"), HtmlFormatter())
 
 
