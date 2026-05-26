@@ -1,0 +1,56 @@
+<h1># Valentine Cards Telegram Bot</h1>
+<p>
+A Telegram-based application for sending Valentine cards inside a company.
+</p>
+
+<button
+    class="screenshot-button"
+    data-bs-toggle="modal"
+    data-bs-target="#imageModal"
+    onclick="addSliderData([
+        ['screens/valentine_image1.png', 'Start menu and bot navigation'],
+        ['screens/valentine_image2.png', 'Choose a Valentine image'],
+        ['screens/valentine_image3.png', 'Upload a custom image'],
+        ['screens/valentine_image4.png', 'Enter Valentine message text'],
+        ['screens/valentine_image5.png', 'Select recipient'],
+        ['screens/valentine_image6.png', 'Choose sender mode (named or anonymous)'],
+        ['screens/valentine_image7.png', 'Inbox with received Valentines']
+    ])"
+>
+see screenshots
+</button>
+
+<h2># Essence</h2>
+<p>
+The project is a Telegram bot that allows users to create and send Valentine cards to other employees.
+The bot was available before February 14 and delivered all cards at a fixed time.
+</p>
+
+<h1># Features</h1>
+<ul>
+    <li>Select a predefined Valentine image or upload a custom one</li>
+    <li>Write a custom message</li>
+    <li>Choose a recipient from the list of employees</li>
+    <li>Send a Valentine either with the sender’s name or anonymously</li>
+</ul>
+
+<h1># Delivery logic</h1>
+<p>
+All created Valentines were stored in the database and were not delivered immediately.
+On February 14 at 14:00, users could open the bot and view their inbox with all received Valentine cards.
+</p>
+
+<h1># Technical details</h1>
+<ul>
+    <li>Telegram Bot API</li>
+    <li>Step-by-step state-based user flow</li>
+    <li>Image upload and processing</li>
+    <li>Scheduled delivery logic</li>
+    <li>Access control for recipients</li>
+</ul>
+
+<h1># Result</h1>
+<p>
+The bot was actively used by employees and successfully handled the full flow:
+from creating Valentine cards to scheduled delivery and viewing received messages.
+</p>
