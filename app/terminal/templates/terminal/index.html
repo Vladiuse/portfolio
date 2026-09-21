@@ -1125,7 +1125,7 @@
     }
     
 
-    let url = full + "/{%url 'terminal:file_content'%}"
+    let url = full + "{%url 'terminal:file_content'%}"
     let is_loading = false;
     function getFileContent(file_id){
         if (is_loading){return}
