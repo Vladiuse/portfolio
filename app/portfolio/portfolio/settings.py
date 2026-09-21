@@ -16,8 +16,8 @@ def get_secret(setting, secrets: dict = secrets) -> str:
     """Get secret setting or fail with ImproperlyConfigured"""
     try:
         return secrets[setting]
-    except KeyError:
-        raise ImproperlyConfigured(f"Set the {setting} setting")
+    except KeyError as error:
+        raise ImproperlyConfigured(f"Set the {setting} setting") from error
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +29,15 @@ SECRET_KEY = get_secret("DJ_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["portfolio.vim-store.ru", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "portfolio.vim-store.ru",
+    "127.0.0.1",
+    "portfolio.sladkievody.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://portfolio.sladkievody.com",
+]
 
 
 # Application definition
