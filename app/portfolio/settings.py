@@ -25,6 +25,7 @@ def get_secret(setting, secrets: dict = secrets) -> str:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret("DJ_SECRET_KEY")
+RESUME_LINK = get_secret("RESUME_LINK")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

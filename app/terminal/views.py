@@ -1,5 +1,6 @@
 import time
 
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template import loader
@@ -17,10 +18,12 @@ def index(request):
         color_theme = DEFAULT_COLOR_THEME
     start_file_id = START_PAGE_FILE_ID
     DIRS = get_templates(to_json=False)
+    resume_link = settings.RESUME_LINK
     content = {
         "start_file_id": start_file_id,
         "color_theme": color_theme,
         "DIRS": DIRS,
+        "resume_link": resume_link,
     }
     return render(request, "terminal/index.html", content)
 
